@@ -2,9 +2,11 @@
 import requests
 import json
 import xlwt
+import datetime
 
 # 在添加每一个sheet之后，初始化字段
 def initXLS():
+    global name
     name = ['currentConfirmedCount', 'confirmedCount', 'suspectedCount', 'curedCount', 'deadCount', 'seriousCount', 'currentConfirmedIncr', 'confirmedIncr', 'suspectedIncr', 'curedIncr', 'deadIncr', 'seriousIncr', 'remark1', 'remark2', 'remark3', 'remark4', 'remark5', 'note1', 'note2', 'note3', 'updateTime']
 
     global row
@@ -34,9 +36,9 @@ def main():
     global sheet
 
     outfile = xlwt.Workbook(encoding='utf-8')
-    # 需要抓取的开始和结束日期
-    start_date = datetime.datetime(2019, 5, 20)
-    sheet = outfile.add_sheet(start_date.strftime("%Y-%m-%d-%H"))
+    # 需要抓取的日期
+    today = datetime.date.today()
+    sheet = outfile.add_sheet(today.strftime("%Y-%m-%d"))
     initXLS()
 
     try:
@@ -49,8 +51,10 @@ def main():
         #    print(state)
             dic = {}
             for i in range(len(state)):
-                dic[i] = list(state[i].values())
-            print('\n')
+                values = list(state[i].values())
+                if len(name) == len(values):
+                    dic[i] = values
+                    print('Data', i)
             writeXLS(dic)
         else:
             print('出错了： ', r.status_code)
