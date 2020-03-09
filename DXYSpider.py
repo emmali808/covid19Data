@@ -51,10 +51,15 @@ def main():
         #    print(state)
             dic = {}
             for i in range(len(state)):
-                values = list(state[i].values())
-                if len(name) == len(values):
-                    dic[i] = values
-                    print('Data', i)
+                keys = list(state[i].keys())
+                dicRec = ['']*len(name)
+                for j in range(len(name)):
+                    for k in range(len(keys)):
+                        if keys[k] == name[j]:
+                            key = keys[k]
+                            dicRec[j] = state[i][key]
+                dic[i] = dicRec
+                print('Data', i)
             writeXLS(dic)
         else:
             print('出错了： ', r.status_code)
